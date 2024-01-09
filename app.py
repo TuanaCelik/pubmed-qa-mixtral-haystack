@@ -15,7 +15,7 @@ sidebar()
 
 st.write("# 🐤 What have they been posting about lately on Mastodon?")
 
-if st.session_state.get("H"):
+if st.session_state.get("HUGGING_FACE_TOKEN"):
     pipeline = start_haystack(st.session_state.get("HUGGING_FACE_TOKEN"))
     st.session_state["api_key_configured"] = True
     search_bar, button = st.columns(2)
@@ -33,16 +33,16 @@ else:
     
 if st.session_state.get("api_key_configured"):
     run_query = (
-        run_pressed or username != st.session_state.username
+        run_pressed or question != st.session_state.question
     )
 
     # Get results for query
-    if run_query and username:
+    if run_query and question:
         reset_results()
-        st.session_state.username = username
+        st.session_state.question = question
         with st.spinner("🔎"):
             try:
-                st.session_state.result = query(username, pipeline)
+                st.session_state.result = query(question, pipeline)
             except JSONDecodeError as je:
                 st.error(
                     "👓 &nbsp;&nbsp; An error occurred reading the results. Is the document store working?"
