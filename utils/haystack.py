@@ -1,6 +1,6 @@
 import streamlit as st
 from haystack import Pipeline
-from pubmed_fetcher import PubMedFetcher
+from utils.pubmed_fetcher import PubMedFetcher
 from haystack.components.generators import HuggingFaceTGIGenerator
 from haystack.components.builders.prompt_builder import PromptBuilder
 
