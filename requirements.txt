@@ -1,0 +1,4 @@
+haystack-ai==2.0.0b2
+streamlit==1.25.0
+pymed
+markdown
