@@ -29,12 +29,12 @@ from haystack.components.builders.prompt_builder import PromptBuilder
 
 def start_haystack(huggingface_token):
     #Use this function to contruct a pipeline
+    keyword_llm = HuggingFaceTGIGenerator("mistralai/Mixtral-8x7B-Instruct-v0.1", token=huggingface_token)
+    keyword_llm.warm_up()
+
     llm = HuggingFaceTGIGenerator("mistralai/Mixtral-8x7B-Instruct-v0.1", token=huggingface_token)
     llm.warm_up()
-    # start_keyword_pipeline(llm)
-    # start_qa_pipeline(llm)
-    keyword_llm = llm
-    answer_llm = llm
+
     keyword_prompt_template = """
 Your task is to convert the follwing question into 3 keywords that can be used to find relevant medical research papers on PubMed.
 Here is an examples:
@@ -70,13 +70,13 @@ Articles:
     pipe.add_component("keyword_llm", keyword_llm)
     pipe.add_component("pubmed_fetcher", fetcher)
     pipe.add_component("prompt_builder", prompt_builder)
-    pipe.add_component("llm", answer_llm)
+    pipe.add_component("llm", llm)
 
     pipe.connect("keyword_prompt_builder.prompt", "keyword_llm.prompt")
     pipe.connect("keyword_llm.replies", "pubmed_fetcher.queries")
 
     pipe.connect("pubmed_fetcher.articles", "prompt_builder.articles")
-    pipe.connect("prompt_builder.prompt", "llm.prompt")                                             
+    pipe.connect("prompt_builder.prompt", "llm.prompt")                                        
     return pipe
 
 
