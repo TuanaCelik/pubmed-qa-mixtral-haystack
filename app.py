@@ -53,5 +53,5 @@ if st.session_state.get("api_key_configured"):
                 
     if st.session_state.result:
         reply = st.session_state.result
-        st.write(reply['llm']['replies'][0])
+        st.write(reply[0])
             

@@ -65,7 +65,6 @@ Articles:
     fetcher = PubMedFetcher()
 
     pipe = Pipeline()
-
     pipe.add_component("keyword_prompt_builder", keyword_prompt_builder)
     pipe.add_component("keyword_llm", keyword_llm)
     pipe.add_component("pubmed_fetcher", fetcher)
@@ -76,16 +75,17 @@ Articles:
     pipe.connect("keyword_llm.replies", "pubmed_fetcher.queries")
 
     pipe.connect("pubmed_fetcher.articles", "prompt_builder.articles")
-    pipe.connect("prompt_builder.prompt", "llm.prompt")                                        
+    pipe.connect("prompt_builder.prompt", "llm.prompt")                                     
     return pipe
 
 
 @st.cache_data(show_spinner=True)
 def query(query, _pipeline):
     try:
-        result = _pipeline.run(data={"keyword_prompt_builder":{"question":query},
+        replies = _pipeline.run(data={"keyword_prompt_builder":{"question":query},
                           "prompt_builder":{"question": query},
                           "answer_llm":{"generation_kwargs": {"max_new_tokens": 500}}})
+        result = replies['llm']['replies']
     except Exception as e:
         result = ["Please make sure you are providing a correct, public Mastodon account"]
     return result
