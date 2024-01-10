@@ -52,6 +52,6 @@ if st.session_state.get("api_key_configured"):
                 st.error("🐞 &nbsp;&nbsp; An error occurred during the request.")            
                 
     if st.session_state.result:
-        voice = st.session_state.result
-        st.write(voice['results'][0])
+        reply = st.session_state.result
+        st.write(reply['llm']['replies'][0])
             
